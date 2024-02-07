@@ -45,7 +45,7 @@ function getNotificationsByAction($mysqli, $action) {
 <body>
     <div id="header">
         <div id="title">
-            <a href="admin_dashboard.php">
+            <a href="admin_index.php">
                 <h1>Admin Dashboard</h1>
             </a>
         </div>

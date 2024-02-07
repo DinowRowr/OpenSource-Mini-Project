@@ -29,8 +29,8 @@ if ($row = mysqli_fetch_assoc($result)) {
 <body>
     <div id="header">
         <div id="title">
-            <a href="dashboard.php">
-                <h1>DnD CollaboraDocs</h1>
+            <a href="index.php">
+                <h1>DnD Libraries</h1>
             </a>
         </div>
     </div>

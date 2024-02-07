@@ -13,7 +13,7 @@ if (isset($_GET['user_id'])) {
     $userID = $_GET['user_id'];
 
     // Query to retrieve the user's uploaded documents with additional information
-    $sql = "SELECT d.file_id, d.title, d.category, d.description, d.author, d.tags, d.infoViews, d.favorites, d.dateCreated, d.status, u.firstName, u.lastName
+    $sql = "SELECT d.file_id, d.title, d.category, d.description, d.author, d.tags, d.infoViews, d.favorites, d.dateCreated, d.status, d.visibility, u.firstName, u.lastName
             FROM documents d
             LEFT JOIN users u ON d.author = u.user_id
             WHERE d.author = $userID";
@@ -29,6 +29,7 @@ if (isset($_GET['user_id'])) {
 }
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,7 +39,7 @@ if (isset($_GET['user_id'])) {
 <body>
     <div id="header">
         <div id="title">
-            <a href="admin_dashboard.php">
+            <a href="admin_index.php">
                 <h1>Admin Dashboard</h1>
             </a>
         </div>
@@ -48,20 +49,21 @@ if (isset($_GET['user_id'])) {
         <h1>Uploaded Files</h1>
         <div>
             <table>
-            <thead>
-                <tr>
-                    <th>File ID</th>
-                    <th>Title</th>
-                    <th>Category</th>
-                    <th>Description</th>
-                    <th>Author</th>
-                    <th>Tags</th>
-                    <th>Views</th>
-                    <th>Favorites</th>
-                    <th>Date Created</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
+                <thead>
+                    <tr>
+                        <th>File ID</th>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Description</th>
+                        <th>Author</th>
+                        <th>Tags</th>                       
+                        <th>Views</th>
+                        <th>Favorites</th>
+                        <th>Date Created</th>
+                        <th>Status</th>
+                        <th>Visibility</th>
+                    </tr>
+                </thead>
                 <tbody>
                     <?php
                     if (!empty($uploadedDocuments)) {
@@ -77,11 +79,12 @@ if (isset($_GET['user_id'])) {
                             echo "<td>" . $document['favorites'] . "</td>";
                             echo "<td>" . $document['dateCreated'] . "</td>";
                             echo "<td>" . $document['status'] . "</td>";
+                            echo "<td>" . ($document['visibility'] == 1 ? 'Public' : 'Private') . "</td>";
                             echo "</tr>";
                         }
                     } else {
-                        echo "<tr><td colspan='10'>No uploaded files found for this user.</td></tr>";
-                    }                    
+                        echo "<tr><td colspan='11'>No uploaded files found for this user.</td></tr>";
+                    }
                     ?>
                 </tbody>
             </table>

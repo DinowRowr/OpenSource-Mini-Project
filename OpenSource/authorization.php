@@ -1,7 +1,7 @@
 <?php
-session_start(); // Start the session
+session_start(); 
 
-require_once 'config.php'; // Include your database connection configuration
+require_once 'config.php'; 
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST['approve'])) {
@@ -78,7 +78,7 @@ if (!$result) {
 <body>
     <div id="header">
         <div id="title">
-            <a href="admin_dashboard.php">
+            <a href="admin_index.php">
                 <h1>Admin Dashboard</h1>
             </a>
         </div>

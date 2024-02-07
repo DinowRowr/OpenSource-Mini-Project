@@ -3,12 +3,12 @@
 <head>
     <link rel="stylesheet" href="#">
     <title>Register</title>
-</head>
     <style>
         .error {
           color: red;
         }
     </style>
+</head>
 <body>
 
     <section class="container">
@@ -43,12 +43,13 @@
               $error = "Email already registered. Please choose a different email.";
           } else {
               // Insert data into the database
-              $sql = "INSERT INTO users (firstName, lastName, email, password)
-                      VALUES ('$firstName', '$lastName', '$email', '$hashedPassword')";
-
+              $sql = "INSERT INTO users (firstName, lastName, email, password, created_at) 
+                      VALUES ('$firstName', '$lastName', '$email', '$hashedPassword', NOW())";
               if (mysqli_query($mysqli, $sql)) {
-                  $_SESSION["userID"] = mysqli_insert_id($mysqli);
-                  header("Location: successReg.php");
+                  echo '<div class="box">
+                          <h1>Success!</h1>
+                          <a class="button" href="login.php">Login</a>
+                        </div>';
                   exit();
               } else {
                   echo "Error: " . $sql . "<br>" . mysqli_error($mysqli);
@@ -62,41 +63,40 @@
         </div>
       <?php endif; ?>
 
-        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="form">
-
-          <div class="column">
-            <div class="input-box">
-              <label>First Name</label>
-              <input type="text" placeholder="Enter First name" name="firstName" required />
-            </div>
-            <div class="input-box">
-              <label>Last Name</label>
-              <input type="text" placeholder="Enter Last name" name="lastName" required />
-            </div>
-          </div>
-            
+      <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="form">
+        <div class="column">
           <div class="input-box">
-            <label>Email Address</label>
-            <input type="email" placeholder="Enter email address" name="email" required />
+            <label>First Name</label>
+            <input type="text" placeholder="Enter First name" name="firstName" required />
           </div>
-
-          <div class="column">
-            <div class="input-box">
-              <label>Password</label>
-              <input type="password" placeholder="Enter password" name="password" id="password" required />
-            </div>
-            <div class="input-box input-error">
-              <label>Confirm Password</label>
-              <input type="password" placeholder="Confirm password" name="confirm_password" id="confirm_password" required />
-            </div>
+          <div class="input-box">
+            <label>Last Name</label>
+            <input type="text" placeholder="Enter Last name" name="lastName" required />
           </div>
+        </div>
+          
+        <div class="input-box">
+          <label>Email Address</label>
+          <input type="email" placeholder="Enter email address" name="email" required />
+        </div>
 
-          <button>Submit</button>
-
-          <div class="login">
-            <p>Already Have an account? <a href="login.php">Login</a></p>
+        <div class="column">
+          <div class="input-box">
+            <label>Password</label>
+            <input type="password" placeholder="Enter password" name="password" id="password" required />
           </div>
-        </form>
+          <div class="input-box input-error">
+            <label>Confirm Password</label>
+            <input type="password" placeholder="Confirm password" name="confirm_password" id="confirm_password" required />
+          </div>
+        </div>
+
+        <button>Submit</button>
+
+        <div class="login">
+          <p>Already Have an account? <a href="login.php">Login</a></p>
+        </div>
+      </form>
     </section>
 
     <script>

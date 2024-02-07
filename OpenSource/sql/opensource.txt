@@ -1,0 +1,6 @@
+dnddocs.x10.mx
+
+acokrvap_opensource - username
+Mlcpp3AVcG - password
+acokrvap_opensource - db name
+localhost - host

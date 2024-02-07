@@ -3,7 +3,7 @@ session_start();
 require_once 'config.php';
 
 // Query to retrieve all uploaded documents with additional information, including author status
-$sql = "SELECT d.file_id, d.title, d.category, d.author, d.tags, d.infoViews, d.favorites, d.dateCreated, d.status, u.firstName, u.lastName, u.roles
+$sql = "SELECT d.file_id, d.title, d.category, d.author, d.tags, d.infoViews, d.favorites, d.dateCreated, d.status, d.visibility, u.firstName, u.lastName, u.roles
         FROM documents d
         LEFT JOIN users u ON d.author = u.user_id";
 
@@ -25,7 +25,7 @@ if ($result) {
 <body>
     <div id="header">
         <div id="title">
-            <a href="admin_dashboard.php">
+            <a href="admin_index.php">
                 <h1>Admin Dashboard</h1>
             </a>
         </div>
@@ -38,20 +38,21 @@ if ($result) {
         <button onclick="clearSearch()">Clear</button>
         <div>
             <table>
-            <thead>
-                <tr>
-                    <th>File ID</th>
-                    <th>Title</th>
-                    <th>Category</th>
-                    <th>Author</th>
-                    <th>Tags</th>
-                    <th>Views</th>
-                    <th>Favorites</th>
-                    <th>Date Created</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
+                <thead>
+                    <tr>
+                        <th>File ID</th>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Author</th>
+                        <th>Tags</th>                        
+                        <th>Views</th>
+                        <th>Favorites</th>
+                        <th>Date Created</th>
+                        <th>Status</th>
+                        <th>Visibility</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
                 <tbody>
                     <?php
                     if (!empty($uploadedDocuments)) {
@@ -62,16 +63,17 @@ if ($result) {
                             echo "<td>" . $document['category'] . "</td>";
                             $authorName = !empty($document['firstName']) ? $document['firstName'] . ' ' . $document['lastName'] : "Deleted User";
                             echo "<td>" . $authorName . "</td>";
-                            echo "<td>" . $document['tags'] . "</td>";
+                            echo "<td>" . $document['tags'] . "</td>";                    
                             echo "<td>" . $document['infoViews'] . "</td>";
                             echo "<td>" . $document['favorites'] . "</td>";
                             echo "<td>" . $document['dateCreated'] . "</td>";
                             echo "<td>" . $document['status'] . "</td>";
+                            echo "<td>" . ($document['visibility'] == 1 ? 'Public' : 'Private') . "</td>";
                             echo '<td><a href="view_details.php?fileID=' . $document['file_id'] . '">View</a> | <a href="delete_document.php?fileID=' . $document['file_id'] . '">Delete</a></td>';
                             echo "</tr>";
                         }
                     } else {
-                        echo "<tr><td colspan='10'>No documents found.</td></tr>";
+                        echo "<tr><td colspan='11'>No documents found.</td></tr>";
                     }                    
                     ?>
                 </tbody>

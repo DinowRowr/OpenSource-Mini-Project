@@ -13,7 +13,7 @@ if (isset($_POST['delete']) && isset($_POST['notification_id'])) {
     $notificationId = $_POST['notification_id'];
     
     // Delete the selected notification
-    $deleteSql = "DELETE FROM notifications WHERE notification_id = ?"; // Use the correct column name for notification_id
+    $deleteSql = "DELETE FROM notifications WHERE notification_id = ?";
     $stmt = $mysqli->prepare($deleteSql);
     $stmt->bind_param("i", $notificationId);
     
@@ -54,7 +54,7 @@ $mysqli->close();
 <body>
     <div id="header">
         <div id="title">
-            <a href="admin_dashboard.php">
+            <a href="admin_index.php">
                 <h1>Admin Dashboard</h1>
             </a>
         </div>
@@ -63,6 +63,15 @@ $mysqli->close();
     <div id="body">
         <div>
             <h2>Notification History</h2>
+            
+            <!-- Add a search bar for author names -->
+            <form id="authorSearchForm">
+                <label for="authorSearch">Search by Author:</label>
+                <input type="text" id="authorSearch" placeholder="Enter author's name">
+                <button type="button" onclick="searchByAuthor()">Search</button>
+                <button type="button" onclick="clearAuthorSearch()">Clear</button>
+            </form>
+
             <table>
                 <thead>
                     <tr>
@@ -94,5 +103,28 @@ $mysqli->close();
             </table>
         </div>
     </div>
+
+    <!-- Add JavaScript for author search -->
+    <script>
+        function searchByAuthor() {
+            var authorSearchText = document.getElementById('authorSearch').value.toLowerCase();
+
+            var rows = document.querySelectorAll('table tbody tr');
+            rows.forEach(function (row) {
+                var authorName = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
+
+                if (authorName.includes(authorSearchText)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function clearAuthorSearch() {
+            document.getElementById('authorSearch').value = '';
+            searchByAuthor(); // Clear the search results
+        }
+    </script>
 </body>
 </html>

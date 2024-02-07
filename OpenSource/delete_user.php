@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'config.php'; // Include your database connection configuration
+require_once 'config.php'; 
 
 if (isset($_GET['user_id'])) {
     $userID = $_GET['user_id'];
@@ -24,7 +24,7 @@ if (isset($_GET['user_id'])) {
     deleteUserRecords($userID, $mysqli);
 
     // Redirect to the admin dashboard after deletion
-    header("Location: admin_dashboard.php");
+    header("Location: admin_index.php");
     exit();
 } else {
     // Handle the case where user_id is not provided

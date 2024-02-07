@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 09, 2023 at 07:00 AM
+-- Generation Time: Jan 17, 2024 at 10:53 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -52,8 +52,19 @@ CREATE TABLE `documents` (
   `dateCreated` timestamp NOT NULL DEFAULT current_timestamp(),
   `author` varchar(50) DEFAULT NULL,
   `size` int(11) NOT NULL,
-  `status` varchar(255) NOT NULL DEFAULT 'inactive'
+  `status` varchar(255) NOT NULL DEFAULT 'inactive',
+  `visibility` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `documents`
+--
+
+INSERT INTO `documents` (`file_id`, `file`, `title`, `category`, `description`, `tags`, `infoViews`, `favorites`, `dateCreated`, `author`, `size`, `status`, `visibility`) VALUES
+(138, 'uploadedDocs/57c20b88015c248df2fca355f326e771.jpg', 'ryuko', 'Other', 'ryuko picture in kill la kill', '#ryuko, #killlakill, #girl, #anime', 54, 0, '2024-01-17 09:04:29', '13', 0, 'active', 1),
+(139, 'uploadedDocs/4c6fb82c567161e0a0b7aa822f8b05e6.jpg', 'girl', 'Other', 'girl in the wallflower', '#girl, #wallflower, #anime, #old', 7, 0, '2024-01-17 09:04:29', '13', 0, 'active', 0),
+(140, 'uploadedDocs/Dr. Byron.png', 'dr byron', 'Compressed Folder', 'picture of cr byron from brawl stars', '#doctor, #byron, #brawlstars, #game, #art', 20, 1, '2024-01-17 09:18:13', '13', 0, 'active', 1),
+(141, 'uploadedDocs/Detective Gray.jpg', 'detective gray', 'PDF', 'picture of detective gray from brawl stars', '#detective, #gray, #brawlstars, #game, #art', 9, 0, '2024-01-17 09:18:13', '13', 0, 'active', 0);
 
 -- --------------------------------------------------------
 
@@ -67,6 +78,13 @@ CREATE TABLE `history` (
   `file_id` int(11) DEFAULT NULL,
   `modifiedDate` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `history`
+--
+
+INSERT INTO `history` (`history_id`, `user_id`, `file_id`, `modifiedDate`) VALUES
+(32, 13, 138, '2024-01-17 17:43:36');
 
 -- --------------------------------------------------------
 
@@ -83,6 +101,16 @@ CREATE TABLE `notifications` (
   `message` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `notifications`
+--
+
+INSERT INTO `notifications` (`notification_id`, `user_id`, `action`, `document_title`, `timestamp`, `message`) VALUES
+(84, 13, 'Approved', 'ryuko', '2024-01-17 17:04:43', NULL),
+(85, 13, 'Approved', 'girl', '2024-01-17 17:04:44', NULL),
+(86, 13, 'Approved', 'dr byron', '2024-01-17 17:18:29', NULL),
+(87, 13, 'Approved', 'detective gray', '2024-01-17 17:18:33', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -95,16 +123,18 @@ CREATE TABLE `users` (
   `lastName` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
-  `roles` varchar(255) DEFAULT NULL
+  `roles` varchar(255) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `firstName`, `lastName`, `email`, `password`, `roles`) VALUES
-(0, '', '', 'admin@gmail.com', '$2y$10$c04vS0emLAihyGK5qAVux.ea.2sU9LZbRTjgXAMnBA.1XavW8iBd2', 'admin'),
-(10, 'Dinothelo', 'Quiroga', 'quirogadinothelo@gmail.com', '$2y$10$QFm.pnZiUIpiR./jGV/ZZeMiHCWKiD.4hEb1TbeTGJ7KZvT7nYCyK', NULL);
+INSERT INTO `users` (`user_id`, `firstName`, `lastName`, `email`, `password`, `roles`, `created_at`) VALUES
+(0, '', '', 'admin@gmail.com', '$2y$10$c04vS0emLAihyGK5qAVux.ea.2sU9LZbRTjgXAMnBA.1XavW8iBd2', 'admin', NULL),
+(13, 'Dinothelo', 'Quiroga', 'quirogadinothelo@gmail.com', '$2y$10$Kk8.KUcpKsLlxUWVC6Zu7OE.qZo6SldFtcXwgSSQ4Fe7SaH7hgyAW', NULL, '2023-11-11 01:37:39'),
+(14, 'Daniel', 'Cunanan', 'danielcunanan@gmail.com', '$2y$10$JVvc03qk3ERugS6FOPrYBuRZ78nXGo3XEatN2jzxMMLcrodYENFRO', NULL, '2024-01-17 17:20:22');
 
 -- --------------------------------------------------------
 
@@ -117,6 +147,13 @@ CREATE TABLE `user_favorites` (
   `user_id` int(11) DEFAULT NULL,
   `file_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user_favorites`
+--
+
+INSERT INTO `user_favorites` (`favorite_id`, `user_id`, `file_id`) VALUES
+(102, 14, 140);
 
 --
 -- Indexes for dumped tables
@@ -142,7 +179,7 @@ ALTER TABLE `documents`
 ALTER TABLE `history`
   ADD PRIMARY KEY (`history_id`),
   ADD KEY `user_id` (`user_id`),
-  ADD KEY `file_id` (`file_id`);
+  ADD KEY `fk_history_documents` (`file_id`);
 
 --
 -- Indexes for table `notifications`
@@ -172,37 +209,37 @@ ALTER TABLE `user_favorites`
 -- AUTO_INCREMENT for table `authorization`
 --
 ALTER TABLE `authorization`
-  MODIFY `authorization_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `authorization_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=114;
 
 --
 -- AUTO_INCREMENT for table `documents`
 --
 ALTER TABLE `documents`
-  MODIFY `file_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
+  MODIFY `file_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=142;
 
 --
 -- AUTO_INCREMENT for table `history`
 --
 ALTER TABLE `history`
-  MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `user_favorites`
 --
 ALTER TABLE `user_favorites`
-  MODIFY `favorite_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
+  MODIFY `favorite_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 
 --
 -- Constraints for dumped tables
@@ -219,6 +256,7 @@ ALTER TABLE `authorization`
 -- Constraints for table `history`
 --
 ALTER TABLE `history`
+  ADD CONSTRAINT `fk_history_documents` FOREIGN KEY (`file_id`) REFERENCES `documents` (`file_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `history_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
   ADD CONSTRAINT `history_ibfk_2` FOREIGN KEY (`file_id`) REFERENCES `documents` (`file_id`);
 
